@@ -6,6 +6,13 @@ formats. Eventual goals:
 * High-quality PDF for printing & storage
 * Documentation-friendly formats for autogeneration in systems like Sphinx and Jekyll
 
+Currently:
+
+    npm install
+    make
+
+Requires [node.js](http://nodejs.org/) and [XeTeX](http://en.wikipedia.org/wiki/XeTeX).
+
 Approach:
 
 Everything is up in the air. Initial approach is to generate [Markdown](http://daringfireball.net/projects/markdown/)

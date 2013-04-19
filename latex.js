@@ -13,7 +13,11 @@ var title = null, chapter = null;
 // To properly order identifiers, we need to sort them by leading integers
 // rather than lexicographically or with the +'10a' hack which will break here
 function pi(x) { return parseInt(x, 10); }
-function esc(x) { return x.replace(/&/g, '\\&').replace(/\$/g, '\\$').replace(/\_/g, '\\_'); }
+function esc(x) { return x.replace(/&/g, '\\&')
+    .replace(/\$/g, '\\$')
+    .replace(/\#/g, '\\#')
+    .replace(/\_/g, '\\_');
+}
 
 sections.sort(function(a, b) {
     // sort by title, then chapter, then identifier
@@ -22,8 +26,28 @@ sections.sort(function(a, b) {
         (pi(a.heading.identifier) - pi(b.heading.identifier));
 });
 
-console.log('\\documentclass[11pt]{article}');
+console.log('\\documentclass[11pt]{book}');
+console.log('\\usepackage{color}');
+console.log('\\usepackage{hyperref}');
+console.log('\\hypersetup{\
+    colorlinks,\
+    citecolor=black,\
+    filecolor=black,\
+    linkcolor=blue,\
+    urlcolor=blue\
+}');
+// console.log('\\makeatletter  % remove the \\refstepcounter directive from \\@sect macro');
+// console.log('\\patchcmd{\\@sect}{\\refstepcounter{#1}}{}{}{}');
+// console.log('\\makeatother');
 console.log('\\begin{document}');
+
+console.log('\\title{Unofficial DC Code}');
+console.log('\\date{December 11, 2012}');
+console.log('\\author{The DC Council}');
+
+console.log('\\maketitle');
+
+console.log('\\tableofcontents');
 
 // # Title
 // ## Chapter
@@ -31,16 +55,16 @@ console.log('\\begin{document}');
 // #### Subsection
 sections.forEach(function(s) {
     if (title !== s.title.identifier) {
-        console.log('\\setcounter{section}{' + s.title.identifier + '}');
+        // console.log('\\setcounter{section}{' + s.title.identifier + '}');
         console.log('\\section{' + esc(s.title.text) + '}\n');
         title = s.title.identifier;
     }
     if (chapter !== s.chapter.identifier) {
-        console.log('\\setcounter{subsection}{' + s.chapter.identifier + '}');
+        // console.log('\\setcounter{subsection}{' + s.chapter.identifier + '}');
         console.log('\\subsection{' + esc(s.chapter.text) + '}\n');
         chapter = s.chapter.identifier;
     }
-    console.log('\\setcounter{subsection}{' + s.heading.identifier + '}');
+    // console.log('\\setcounter{subsection}{' + s.heading.identifier + '}');
     console.log('\\subsection{' + esc(s.heading.catch_text) + '}');
     if (s.text) {
         console.log('\n');
